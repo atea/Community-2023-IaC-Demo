@@ -30,3 +30,17 @@ locals {
     managed-by-terraform = true
   }
 }
+
+resource "azurerm_resource_group" "demo" {
+    name = "RG-Community-Demo"
+    location = var.location
+
+    tags = local.tags
+}
+
+module "network" {
+    source = "./modules/network"
+    name = "demo"
+    resource_group = azurerm_resource_group.demo
+    address_space = "10.42.0.0/24"
+}

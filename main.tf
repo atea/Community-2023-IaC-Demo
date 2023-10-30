@@ -43,4 +43,26 @@ module "network" {
   name           = "demo"
   resource_group = azurerm_resource_group.demo
   address_space  = "10.42.0.0/24"
+
+  tags = local.tags
+}
+
+module "webserver" {
+  source           = "./modules/linuxvm"
+  name             = "web01"
+  resource_group   = azurerm_resource_group.demo
+  subnet_id        = module.network.frontend_subnet.id
+  enable_public_ip = true
+
+  tags = local.tags
+}
+
+module "backend" {
+  source           = "./modules/linuxvm"
+  name             = "backend01"
+  resource_group   = azurerm_resource_group.demo
+  subnet_id        = module.network.frontend_subnet.id
+  enable_public_ip = false
+
+  tags = local.tags
 }
